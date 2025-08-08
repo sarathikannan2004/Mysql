@@ -1,0 +1,142 @@
+-- Step 1: Create the Example Table
+CREATE TABLE Sales (
+    SaleID INT PRIMARY KEY,
+    Salesperson VARCHAR(50),
+    Region VARCHAR(50),
+    Product VARCHAR(50),
+    Quantity INT,
+    SaleAmount DECIMAL(10,2)
+);
+
+-- Step 2: Insert Sample Data
+INSERT INTO Sales (SaleID, Salesperson, Region, Product, Quantity, SaleAmount) VALUES
+(1, 'Alice', 'North', 'Laptop', 1, 1000.00),
+(2, 'Bob', 'South', 'Mouse', 3, 75.00),
+(3, 'Alice', 'North', 'Monitor', 2, 300.00),
+(4, 'Charlie', 'East', 'Keyboard', 1, 50.00),
+(5, 'Bob', 'South', 'Monitor', 1, 150.00),
+(6, 'Alice', 'North', 'Mouse', 2, 50.00),
+(7, 'Charlie', 'East', 'Laptop', 2, 2000.00),
+(8, 'David', 'West', 'Laptop', 1, 1100.00),
+(9, 'David', 'West', 'Mouse', 4, 100.00),
+(10, 'Eve', 'South', 'Monitor', 3, 450.00),
+(11, 'Eve', 'South', 'Keyboard', 2, 100.00),
+(12, 'Eve', 'South', 'Mouse', 1, 25.00),
+(13, 'Alice', 'North', 'Keyboard', 1, 60.00),
+(14, 'Bob', 'South', 'Laptop', 1, 1200.00),
+(15, 'Charlie', 'East', 'Mouse', 2, 50.00);
+
+-- 1. Total quantity sold by each salesperson
+SELECT Salesperson, SUM(Quantity) AS TotalQuantity
+FROM Sales
+GROUP BY Salesperson;
+
+-- 2. Salespersons who sold more than 5 items in total
+SELECT Salesperson, SUM(Quantity) AS TotalQuantity
+FROM Sales
+GROUP BY Salesperson
+HAVING SUM(Quantity) > 5;
+
+-- 3. Number of products sold by each salesperson
+SELECT Salesperson, COUNT(*) AS NumberOfProducts
+FROM Sales
+GROUP BY Salesperson;
+
+-- 4. Regions where total sale amount exceeded $1000
+SELECT Region, SUM(SaleAmount) AS TotalSales
+FROM Sales
+GROUP BY Region
+HAVING SUM(SaleAmount) > 1000;
+
+-- 5. Salespersons who made more than 2 sales transactions
+SELECT Salesperson, COUNT(*) AS Transactions
+FROM Sales
+GROUP BY Salesperson
+HAVING COUNT(*) > 2;
+
+-- 6. Total sale amount by product over $500
+SELECT Product, SUM(SaleAmount) AS TotalSales
+FROM Sales
+GROUP BY Product
+HAVING SUM(SaleAmount) > 500;
+
+-- 7. Total quantity sold of each product in each region
+SELECT Region, Product, SUM(Quantity) AS TotalQuantity
+FROM Sales
+GROUP BY Region, Product;
+
+-- 8. Salespersons who sold more than 1 type of product
+SELECT Salesperson
+FROM Sales
+GROUP BY Salesperson
+HAVING COUNT(DISTINCT Product) > 1;
+
+-- 9. Average quantity per product sold per region > 1
+SELECT Region, Product, AVG(Quantity) AS AvgQuantity
+FROM Sales
+GROUP BY Region, Product
+HAVING AVG(Quantity) > 1;
+
+-- 10. Salespersons with total sale amount between $500 and $1500
+SELECT Salesperson, SUM(SaleAmount) AS TotalSales
+FROM Sales
+GROUP BY Salesperson
+HAVING SUM(SaleAmount) BETWEEN 500 AND 1500;
+
+-- 11. Top-performing products (>3 units sold)
+SELECT Product, SUM(Quantity) AS TotalQuantity
+FROM Sales
+GROUP BY Product
+HAVING SUM(Quantity) > 3;
+
+-- 12. Salespersons who sold laptops
+SELECT DISTINCT Salesperson
+FROM Sales
+WHERE Product = 'Laptop';
+
+-- 13. Total sale amount per salesperson per region > $500
+SELECT Salesperson, Region, SUM(SaleAmount) AS TotalSales
+FROM Sales
+GROUP BY Salesperson, Region
+HAVING SUM(SaleAmount) > 500;
+
+-- 14. Salespersons who sold at least 2 different products in a single region
+SELECT Salesperson, Region
+FROM Sales
+GROUP BY Salesperson, Region
+HAVING COUNT(DISTINCT Product) >= 2;
+
+-- 15. Products sold in more than one region
+SELECT Product
+FROM Sales
+GROUP BY Product
+HAVING COUNT(DISTINCT Region) > 1;
+
+-- 16. Total number of sales per product with at least 2 sales
+SELECT Product, COUNT(*) AS SalesCount
+FROM Sales
+GROUP BY Product
+HAVING COUNT(*) >= 2;
+
+-- 17. Region-wise total quantity sold by each salesperson
+SELECT Region, Salesperson, SUM(Quantity) AS TotalQuantity
+FROM Sales
+GROUP BY Region, Salesperson;
+
+-- 18. Salespersons with more than 3 transactions and total sales > $1000
+SELECT Salesperson, COUNT(*) AS Transactions, SUM(SaleAmount) AS TotalSales
+FROM Sales
+GROUP BY Salesperson
+HAVING COUNT(*) > 3 AND SUM(SaleAmount) > 1000;
+
+-- 19. Average sale amount per region > $200
+SELECT Region, AVG(SaleAmount) AS AvgSale
+FROM Sales
+GROUP BY Region
+HAVING AVG(SaleAmount) > 200;
+
+-- 20. Regions and products where more than 3 units were sold
+SELECT Region, Product, SUM(Quantity) AS TotalQuantity
+FROM Sales
+GROUP BY Region, Product
+HAVING SUM(Quantity) > 3;
